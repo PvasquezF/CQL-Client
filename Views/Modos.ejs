@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/Css/bootstrap.css">
+    <link rel="stylesheet" href="/Css/main.css">
+    <title>Modos</title>
+</head>
+
+<body style="background-color: rgba(25, 50, 66, 0.411);">
+    <form action="/logout" action="get">
+        <button style="left: 1300px; position: relative;" class="btn btn-warning" type="submit">Salir</button>
+    </form>
+    <center>
+        <div class="modos">
+            <center>
+                <h2>Seleccione el modo deseado</h2>
+            </center>
+            <form>
+                <button id="img-modo" type="submit" formaction="/BeginnerMode">
+                    <img style="width: 90px;" src="/resources/noob.png">
+                </button>
+                <h5>Modo Principante</h6>
+                <br>
+                <button id="img-modo" type="submit" formaction="/MiddleMode">
+                    <img style="width: 90px;" src="/resources/intermedio.png">
+                </button>
+                <h5>Modo Intermedio</h6>
+                <br>
+                <button id="img-modo" type="submit" formaction="/AdvancedMode">
+                    <img style="width: 90px;" src="/resources/avanzado.png">
+                </button>
+                <h5>Modo Avanzado</h6>
+            </form>
+        </div>
+    </center>
+    <script src="/Js/Modes.js"></script>
+</body>
+
+</html>

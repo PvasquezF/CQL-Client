@@ -1,0 +1,29 @@
+{
+  "name": "cql-client",
+  "version": "1.0.0",
+  "description": "Cliente CQL",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PvasquezF/CQL-Client.git"
+  },
+  "author": "Pavel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PvasquezF/CQL-Client/issues"
+  },
+  "homepage": "https://github.com/PvasquezF/CQL-Client#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^2.7.1",
+    "express": "^4.17.1",
+    "express-session": "^1.16.2",
+    "jQuery": "^1.7.4",
+    "jison": "^0.4.18",
+    "jquery": "^3.4.1",
+    "request": "^2.88.0"
+  }
+}

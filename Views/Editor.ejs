@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>CQL-Client</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel="stylesheet" href="/Css/codemirror.css">
+    <link rel="stylesheet" href="/Css/dracula.css">
+    <link rel="stylesheet" href="/Css/main.css">
+    <script src="/Js/codemirror.js"></script>
+    <script src="/Mode/sql/sql.js"></script>
+    <script src="/Mode/javascript/javascript.js"></script>
+</head>
+
+<body>
+    <center>
+        <h1>Modo X</h1>
+            <button onclick="ejecutar()">Ejecutar</button>
+       
+    </center>
+
+    <div class="row">
+        <div class="column treeView">
+            <ul id="myUL">
+                <% for(var i=0; i<struc.length; i++) {%>
+                <li>
+                    <span class="caret" style="font-family:Arial, Helvetica, sans-serif; color: rgb(211, 0, 105);"><b><%=struc[i].base.nombre%></b></span>
+                    <ul class="nested">
+                        <li>
+                        <span class="caret" style="font-family:Arial, Helvetica, sans-serif; color: rgb(151, 0, 211);"><b>Tablas</b></span>
+                            <ul class="nested">
+                            <% for(var j=0; j<struc[i].base.tablas.length; j++) {%>
+                                <li><span class="caret" style="font-family:Arial, Helvetica, sans-serif; color: rgb(0, 127, 211);"><b><%=struc[i].base.tablas[j].tabla.nombre%></b></span>
+                                    <ul class="nested">
+                                    <% for(var k=0; k<struc[i].base.tablas[j].tabla.columnas.length; k++) {%>
+                                            <li style="font-family:Arial, Helvetica, sans-serif; color: rgb(4, 146, 103);"><b><%=struc[i].base.tablas[j].tabla.columnas[k]%></b>
+                                            </li>
+                                    <%}%>
+                                    </ul>
+                                </li>
+                            <%}%>
+                            </ul>
+                        </li>
+                        <li>
+                        <span class="caret" style="font-family:Arial, Helvetica, sans-serif; color: rgb(151, 0, 211);"><b>User Types</b></span>
+                            <ul class="nested">
+                            <% for(var j=0; j<struc[i].base.tipos.length; j++) {%>
+                                <li><span class="caret" style="font-family:Arial, Helvetica, sans-serif; color: rgb(0, 127, 211);"><b><%=struc[i].base.tipos[j].tipo.nombre%></b></span>
+                                    <ul class="nested">
+                                    <% for(var k=0; k<struc[i].base.tipos[j].tipo.atributos.length; k++) {%>
+                                        <li style="font-family:Arial, Helvetica, sans-serif; color: rgb(4, 146, 103);"><b><%=struc[i].base.tipos[j].tipo.atributos[k]%></b>
+                                        </li>
+                                    <%}%>
+                                    </ul>
+                                </li>
+                            <%}%>
+                            </ul>
+                        </li>
+                        <li>
+                        <span class="caret" style="font-family:Arial, Helvetica, sans-serif; color: rgb(151, 0, 211);"><b>Procedimientos</b></span>
+                            <ul class="nested">
+                            <% for(var j=0; j<struc[i].base.procedures.length; j++) {%>
+                                <li><span class="caret" style="font-family:Arial, Helvetica, sans-serif; color: rgb(4, 146, 103);"><b><%=struc[i].base.procedures[j].tipo.nombre%></b></span>
+                                </li>
+                            <%}%>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <%}%>
+            </ul>
+        </div>
+        <div class="column">
+            <br>
+        </div>
+        <div class="column AreaTexto">
+            <div class="row">
+                <textarea id="myTextarea" name="myTextarea"></textarea>
+            </div>
+            <div class="row">
+                <br>
+            </div>
+            <div class="row pestañas">
+                <div class="tab">
+                    <button class="tablinks" onclick="openTab(event, 'Consola')">Consola</button>
+                    <button class="tablinks" onclick="openTab(event, 'PaquetesEnviados')">Paquetes Enviados</button>
+                    <button class="tablinks" onclick="openTab(event, 'PaquetesRecibidos')">Paquetes Recibidos</button>
+                </div>
+                <div id="Consola" class="tabcontent">
+                    <textarea id="consolaArea" name="consolaArea" class="consola"><% if(listaMensajes != undefined){listaMensajes} %></textarea>
+                </div>
+
+                <div id="PaquetesEnviados" class="tabcontent">
+                    <textarea id="paqueteAreaEnviado" name="paqueteAreaEnviado" class="consola"><%= paquetesOut %></textarea>
+        </div>
+
+        <div id="PaquetesRecibidos" class="tabcontent">
+            <textarea id="paqueteAreaRecibido" name="paqueteAreaRecibido" class="consola"><%= paquetesIn %></textarea>
+        </div>
+    </div>
+    </div>
+    </div>
+    <script src="/Js/main.js"></script>
+    <script src="/Js/Jquery.js"></script>
+    <script src="/Js/Login.js"></script>
+
+    <script>
+        var editor = CodeMirror.fromTextArea(myTextarea, {
+            lineNumbers: true,
+            mode: "sql",
+            mode: "javascript",
+            theme: "dracula"
+        });
+        editor.setSize(null, 300);
+    </script>
+    
+</body>
+
+</html>

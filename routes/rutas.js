@@ -165,15 +165,16 @@ exports.routesConfig = function (app) {
             }, function (error, response, body) {
                 var result = interprete.parse(JSON.parse(body));
                 var listaMensajes = "";
-                var listaErrores = "";
+                var listaErrores = [];
                 var listaSelect = [];
                 result.map(m => {
                     if (m.mensaje != undefined && m.mensaje != null) {
                         listaMensajes += m.mensaje + "\n";
                     } else if (m.error != undefined && m.error != null) {
-                        var er = m.error.fila + " " + m.error.columna + " " + m.error.tipo + " " + m.error.descripcion
-                            + " " + m.error.fecha;
-                        listaErrores += er + "\n";
+                        //var er = m.error.fila + " " + m.error.columna + " " + m.error.tipo + " " + m.error.descripcion
+                        //    + " " + m.error.fecha;
+                        //listaErrores += er + "\n";
+                        listaErrores.push(m.error);
                     } else if (m.data != undefined && m.data != null) {
                         listaSelect.push(m.data);
                     }

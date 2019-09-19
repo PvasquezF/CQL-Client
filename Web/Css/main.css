@@ -1,22 +1,19 @@
-body{
+#cuerpo{
   background-color: #d2c6f3;
 }
 
-.column {
+.column_layout {
     float: left;
     width: 1%;
   }
 
-  /* Clear floats after the columns */
-  .row:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-  
-  /* Responsive layout - makes the three columns stack on top of each other instead of next to each other on smaller screens (600px wide or less) */
-  @media screen and (max-width: 600px) {
-    .column {
+.row_layout:after {
+  content: "";
+  display: table;
+  clear: both;  
+}
+ @media screen and (max-width: 600px) {
+    .column_layout {
       width: 100%;
     }
   }
@@ -24,26 +21,35 @@ body{
 .treeView{
   background: rgba(185, 52, 247, 0.39);
   width: 20%;
-  height: 530px;
+  height: 570px;
   border-style: solid;
   border-radius: 5px;
   overflow: auto;
 }
 .AreaTexto{
-  width: 75%;
-  height: 300px;
+  width: 1050px;
+  height: 306px;
+  /*height: 280px;*/
   border-style: solid;
-  border-radius: 5px;
+}
+
+.AreaTexto2{
+  width: 311px;
 }
 .pestañas{
   border-style: solid;
   border-radius: 5px;
-  height: 205px;
+  height: 243px;
+  width: 1050px;
+  position: relative;
+  top: 10px;
 }
-
+.PaquetesRecibidos{
+  overflow: auto;
+}
 .consola{
-  height: 165px;
-  width: 99%;
+  height: 100%;
+  width: 100%;
   border-style: solid;
   border-radius: 5px;
   border-width: 2px;
@@ -100,6 +106,12 @@ ul, #myUL {
   background-color: #f1f1f1;
 }
 
+.tabsEditor {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+}
+
 /* Style the buttons that are used to open the tab content */
 .tab button {
   background-color: inherit;
@@ -107,7 +119,17 @@ ul, #myUL {
   border: none;
   outline: none;
   cursor: pointer;
-  padding: 8px 8px;
+  padding: 4px 4px;
+  transition: 0.3s;
+}
+
+.tabsEditor button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 4px 4px;
   transition: 0.3s;
 }
 
@@ -121,12 +143,22 @@ ul, #myUL {
   background-color: #ccc;
 }
 
+.tabsEditor button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tabsEditor button.active {
+  background-color: #ccc;
+}
+
 /* Style the tab content */
 .tabcontent {
   display: none;
   border: 1px solid #ccc;
   border-top: none;
-  height: 150px;
+  height: 86%;
+  width: 100%;
 }
 
 .form{
@@ -160,4 +192,36 @@ input{
   cursor:pointer;
   overflow: hidden;
   outline:none;
+}
+
+#blocklyDiv{
+  width: 733px;
+  height: 300px;
+  background: #ccc;
+}
+#btnExcecute {
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  position: absolute;
+  left: 1280px;
+  top: 300px;
+  z-index:1000;
+}
+
+#herramientas{
+  width: 1050px;
+  border-radius: 2px; 
+  border: 1px solid rgb(24, 0, 0);
+  border-width: 2px;
+  background: #1ec35352;
+  border-style: solid;
+}
+
+.tabEditor{
+  display: none;
+  background-color: red;
 }

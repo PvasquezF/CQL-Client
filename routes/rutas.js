@@ -1,7 +1,31 @@
 const request = require('request');
-const interprete = require('../Interpreter/LupGrammar.js')
+const interprete = require('../Interpreter/LupGrammar.js');
+var formidable = require('formidable');
+var fs = require('fs');
 var ssn;
 exports.routesConfig = function (app) {
+    app.post("/AdvancedMode", (req, res) => {
+        ssn = req.session;
+        var form = new formidable.IncomingForm();
+        form.parse(req, function (err, fields, files) {
+            var oldpath = files.archivo.path;
+            var newpath = './public/' + files.archivo.name;
+            fs.rename(oldpath, newpath, function (err) {
+                if (err) throw err;
+                fs.readFile(newpath, "utf-8", function (err, buf) {
+                    res.status(202).json({
+                        paquetesOut: ssn.datos.paquetesOut,
+                        paquetesIn: ssn.datos.paquetesIn,
+                        listaMensajes: ssn.datos.mensajes,
+                        listaErrores: ssn.datos.errores,
+                        struc: ssn.datos.struc,
+                        archivo: buf
+                    });
+                });
+            });
+
+        });
+    });
     app.get("/", (req, res) => {
         ssn = req.session;
         if (ssn.datos) {
@@ -86,7 +110,7 @@ exports.routesConfig = function (app) {
     app.get('/BeginnerMode', function (req, res) {
         ssn = req.session;
         if (ssn.datos) {
-            res.render('./Editor.ejs', {
+            res.render('./BeginnerMode.ejs', {
                 paquetesOut: ssn.datos.paquetesOut,
                 paquetesIn: ssn.datos.paquetesIn,
                 listaMensajes: ssn.datos.mensajes,
@@ -101,7 +125,13 @@ exports.routesConfig = function (app) {
     app.get('/MiddleMode', function (req, res) {
         ssn = req.session;
         if (ssn.datos) {
-            res.render('./Editor.ejs', { paquetesOut: ssn.datos.paquetesOut, paquetesIn: ssn.datos.paquetesIn, struc: ssn.datos.struc });
+            res.render('./MiddleMode.ejs', {
+                paquetesOut: ssn.datos.paquetesOut,
+                paquetesIn: ssn.datos.paquetesIn,
+                listaMensajes: ssn.datos.mensajes,
+                listaErrores: ssn.datos.errores,
+                struc: ssn.datos.struc
+            });
         } else {
             res.redirect('/');
         }
@@ -110,7 +140,13 @@ exports.routesConfig = function (app) {
     app.get('/AdvancedMode', function (req, res) {
         ssn = req.session;
         if (ssn.datos) {
-            res.render('./Editor.ejs', { paquetesOut: ssn.datos.paquetesOut, paquetesIn: ssn.datos.paquetesIn, struc: ssn.datos.struc });
+            res.render('./Editor.ejs', {
+                paquetesOut: ssn.datos.paquetesOut,
+                paquetesIn: ssn.datos.paquetesIn,
+                listaMensajes: ssn.datos.mensajes,
+                listaErrores: ssn.datos.errores,
+                struc: ssn.datos.struc
+            });
         } else {
             res.redirect('/');
         }
@@ -119,8 +155,7 @@ exports.routesConfig = function (app) {
     app.post('/Ejecutar', function (req, res) {
         ssn = req.session;
         if (ssn.datos) {
-            console.log(req.body.data);
-            loopEnviar = `[+QUERY][+USER]` + usuario + `[-USER][+DATA]`+req.body.data+`[-DATA][-QUERY]`;
+            loopEnviar = `[+QUERY][+USER]` + usuario + `[-USER][+DATA]` + req.body.data + `[-DATA][-QUERY]`;
             data = JSON.stringify(loopEnviar);
             request.post({
                 headers: { 'content-type': 'application/json' },
@@ -131,14 +166,16 @@ exports.routesConfig = function (app) {
                 var result = interprete.parse(JSON.parse(body));
                 var listaMensajes = "";
                 var listaErrores = "";
-                console.log(result);
+                var listaSelect = [];
                 result.map(m => {
                     if (m.mensaje != undefined && m.mensaje != null) {
-                        listaMensajes += m.mensaje+"\n";
+                        listaMensajes += m.mensaje + "\n";
                     } else if (m.error != undefined && m.error != null) {
-                        var er = m.error.fila + " " + m.error.columna+ " " + m.error.tipo+ " " + m.error.descripcion
-                        + " " + m.error.fecha;
-                        listaErrores += er+"\n";
+                        var er = m.error.fila + " " + m.error.columna + " " + m.error.tipo + " " + m.error.descripcion
+                            + " " + m.error.fecha;
+                        listaErrores += er + "\n";
+                    } else if (m.data != undefined && m.data != null) {
+                        listaSelect.push(m.data);
                     }
                 });
                 if (result) {
@@ -152,7 +189,8 @@ exports.routesConfig = function (app) {
                     paquetesIn: ssn.datos.paquetesIn,
                     listaMensajes: ssn.datos.mensajes,
                     listaErrores: ssn.datos.errores,
-                    struc: ssn.datos.struc
+                    struc: ssn.datos.struc,
+                    selects: listaSelect
                 });
             });
         } else {

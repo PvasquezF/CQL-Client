@@ -1,6 +1,6 @@
 /* lexical grammar */
 %lex
-%s mensaje descripcion fecha
+%s mensaje descripcion fecha data
 identificador   [a-zA-Z_][a-zA-Z0-9_]*
 dataRegex       \\[\\+DATA\\](.|\s)*\\[-DATA\\]
 passwordRegex   \\[\\+PASS\\](.|\s)*\\[-PASS\\]
@@ -68,6 +68,10 @@ entero [0-9]+
 <fecha>.                return 'data';
 <fecha>\s               return 'data';
 
+'[+DATA]'               {this.begin("data"); return "dataA";}
+<data>'[-DATA]'         {this.begin("INITIAL"); return "dataC";}
+<data>.                 return 'data';
+<data>\s                return 'data';
 <<EOF>>                 return 'EOF'
 .                       return 'INVALID'
 
@@ -92,7 +96,11 @@ PAQUETES : PAQUETELOGIN{$$ = $1;}
 
 QUERY   : PAQUETEMESSAGE{$$ = {"mensaje":$1};}
         | PAQUETEERROR{$$ = {"error":$1};}
+        | PAQUETEDATA{$$ = {"data":$1};}
         ;
+
+PAQUETEDATA : dataA CUERPOMENSAJE dataC {$$ = $2;}
+            ;
 
 PAQUETELOGIN : loginA RESULTLOGIN loginC {$$ = $2;}
              ;

@@ -10,21 +10,65 @@
     <link rel="stylesheet" href="/Css/dracula.css">
     <link rel="stylesheet" href="/Css/main.css">
     <link rel="stylesheet" href="/Css/bootstrap.css">
+    <script src="/Js/codemirror.js"></script>
+    <script src="/Mode/sql/sql.js"></script>
+    <script src="/Mode/javascript/javascript.js"></script>
+    <script src="/Js/blockly/blockly_compressed.js"></script>
+    <script src="/Js/blockly/blocks_compressed.js"></script>
+    <script src="/Js/blockly/javascript_compressed.js"></script>
+    <script src="/Js/blockly/en.js"></script>
+    <script src="/Js/blockly/generator.js"></script>
+    <script src="/Js/blockly/bloqueCommit.js"></script>
 </head>
+
+<xml id="toolbox" style="display: none">
+    <category name="Sentencias" colour="290">
+        <block type="use"></block>
+        <block type="insert"></block>
+        <block type="insertspecial"></block>
+        <block type="update"></block>
+        <block type="delete"></block>
+        <block type="specialdelete"></block>
+        <block type="select"></block>
+        <block type="where"></block>
+    </category>
+    <category name="Atributos" colour="120">
+        <block type="campo"></block>
+        <block type="all"></block>
+        <block type="campo_tabla"></block>
+    </category>
+    <category name="Operadores" colour="20">
+        <block type="logic_operation"></block>
+        <block type="logic_compare"></block>
+        <block type="logic_negate"></block>
+        <block type="math_arithmetic"></block>
+    </category>
+    <category name="Valores" colour="210">
+        <block type="example_date">
+            <field name="FIELDNAME">2020-02-20</field>
+        </block>
+        <block type="time"></block>
+        <block type="expresion"></block>
+        <block type="text"></block>
+        <block type="math_number"></block>
+        <block type="logic_null"></block>
+        <block type="logic_boolean"></block>
+        <block type="logic_ternary"></block>
+    </category>
+    <category name="Variables" colour="330" custom="VARIABLE"></category>
+</xml>
 
 <body id="cuerpo" class="cuerpo">
     <center>
         <a href="/Modos">
-            <h5>Modo Avanzado</h5>
+            <h1>Modo Principiante</h1>
         </a>
         <button id="btnExcecute" name="btnExcecute" onclick="ejecutar()">
             <img style="width: 50px;" src="/resources/play-button.png">
         </button>
+
     </center>
-    <form method="post" enctype="multipart/form-data" id="formuploadajax" action="/AdvancedMode" style="display: none;">
-        <input id="archivo" name="archivo" type="file" name="filename" onchange="enviarArchivo()">
-        <input type="submit" name="upload">
-    </form>
+
     <div class="row_layout">
         <div class="column_layout">
             <br>
@@ -93,29 +137,14 @@
         <div class="column_layout">
             <br>
         </div>
-        <div class="column_layout">
-            <center>
-                <div id="herramientas" class="row_layout ">
-                    <button id="img-modo" onclick="agregarPestañaEditor()"><img style="width: 20px;"
-                            src="/resources/add.png"></button>
-                    <button id="img-modo" onclick="closeTab()"><img style="width: 20px;"
-                            src="/resources/cancel.png"></button>
-                    <button id="img-modo" onclick="abrirArchivo()"><img style="width: 20px;"
-                            src="/resources/cloud.png"></button>
-                    <button id="img-modo" onclick="guardarArchivo()"><img style="width: 20px;"
-                            src="/resources/diskette.png"></button>
-                    <button id="img-modo" onclick="ejecutar(true)"><img style="width: 20px;"
-                            src="/resources/fast-forward.png"></button>
-                    <button id="img-modo" onclick="volver()"><img style="width: 20px;"
-                            src="/resources/logout.png"></button>
+        <div class="column_layout AreaTexto">
+            <div class="row_layout">
+                <div class="column_layout" id="blocklyDiv">
                 </div>
-            </center>
-            <div id="pestañasEditor" class="row_layout AreaTexto ">
-                <div id="tabsEditor" class="tabsEditor">
-                    <button class="tablinks" onclick="openTabEditor(event, 'tb', editor, true, this)">Editor</button>
-                </div>
-                <div id="tb" class="tabEditor">
-                    <textarea id="myTextarea" name="myTextarea"></textarea>
+                <div class="column_layout AreaTexto2">
+                    <textarea id="myTextarea" name="myTextarea">
+                        <span>hola</span>
+                    </textarea>
                 </div>
             </div>
             <div id="row_pestañas" class="row_layout pestañas">
@@ -141,14 +170,28 @@
             </div>
         </div>
     </div>
-    <script src="/Js/codemirror.js"></script>
-    <script src="/Mode/sql/sql.js"></script>
-    <script src="/Mode/javascript/javascript.js"></script>
-    <script src="/Js/main.js"></script>
-    <script src="/Js/Jquery.js"></script>
-    <script src="/Js/Login.js"></script>
-    <script src="/Js/bootstrap.js"></script>
-    <script src="/Js/filesaver.js"></script>
+    <script>
+        var workspace = Blockly.inject('blocklyDiv',
+            {
+                toolbox: document.getElementById('toolbox'),
+                zoom:
+                {
+                    controls: true,
+                    wheel: true,
+                    startScale: 1.0,
+                    maxScale: 3,
+                    minScale: 0.3,
+                    scaleSpeed: 1.2
+                },
+                trashcan: true
+            });
+        var code = Blockly.JavaScript.workspaceToCode(workspace);
+        function myUpdateFunction(event) {
+            var code = Blockly.JavaScript.workspaceToCode(workspace);
+            editor.setValue(code);
+        }
+        workspace.addChangeListener(myUpdateFunction);
+    </script>
     <script>
         var editor = CodeMirror.fromTextArea(myTextarea, {
             lineNumbers: true,
@@ -156,14 +199,15 @@
             mode: "javascript",
             theme: "dracula"
         });
-        editor.setSize(null, 267);
-        $('#button').on('click', function () {
-            $('#file-input').trigger('click');
-        });
-        //editor.setSize(null, 240);
+            //editor.setSize(auto, 100);
     </script>
+    <script>
 
-
+    </script>
+    <script src="/Js/main.js"></script>
+    <script src="/Js/Jquery.js"></script>
+    <script src="/Js/Login.js"></script>
+    <script src="/Js/bootstrap.js"></script>
 </body>
 
 </html>

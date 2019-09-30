@@ -1,6 +1,6 @@
 var toggler = document.getElementsByClassName("caret");
 var i;
-var areaActual;
+var areaActual = !!editor ? editor : null;
 var botonActual;
 var tabNameActual;
 for (i = 0; i < toggler.length; i++) {
@@ -136,7 +136,7 @@ function guardarArchivo() {
   if (!!areaActual && !!areaActual.getValue() && !!tabNameActual) {
     var entrada = areaActual.getValue();
     var blob = new Blob([entrada], { type: "text/plain;charset=utf-8" });
-    saveAs(blob, tabNameActual + '.txt');
+    saveAs(blob, tabNameActual + '.cql');
   }
 }
 

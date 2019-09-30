@@ -96,38 +96,39 @@
                                     </ul>
                                 </li>
                             <%}%>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <span class="caret"
-                                        style="font-family:Arial, Helvetica, sans-serif; color: rgb(151, 0, 211);"><b>User
-                                            Types</b></span>
-                                    <ul class="nested">
-                                        <% for(var j=0; j<struc[i].base.tipos.length; j++) {%>
-                                        <li><span class="caret"
-                                                style="font-family:Arial, Helvetica, sans-serif; color: rgb(0, 127, 211);"><b><%=struc[i].base.tipos[j].tipo.nombre%></b></span>
-                                            <ul class="nested">
-                                                <% for(var k=0; k<struc[i].base.tipos[j].tipo.atributos.length; k++) {%>
-                                                <li
-                                                    style="font-family:Arial, Helvetica, sans-serif; color: rgb(4, 146, 103);">
-                                                    <b><%=struc[i].base.tipos[j].tipo.atributos[k]%></b>
-                                                </li>
-                                                <%}%>
-                                    </ul>
-                                </li>
-                            <%}%>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            <span class="caret"
-                                                style="font-family:Arial, Helvetica, sans-serif; color: rgb(151, 0, 211);"><b>Procedimientos</b></span>
-                                            <ul class="nested">
-                                                <% for(var j=0; j<struc[i].base.procedures.length; j++) {%>
-                                                <li><span class="caret"
-                                                        style="font-family:Arial, Helvetica, sans-serif; color: rgb(4, 146, 103);"><b><%=struc[i].base.procedures[j].tipo.nombre%></b></span>
-                                                </li>
-                                                <%}%>
                             </ul>
+                        </li>
+                        <li>
+                            <span class="caret"
+                                style="font-family:Arial, Helvetica, sans-serif; color: rgb(151, 0, 211);"><b>User
+                                    Types</b></span>
+                            <ul class="nested">
+                                <% for(var j=0; j<struc[i].base.tipos.length; j++) {%>
+                                <li><span class="caret"
+                                        style="font-family:Arial, Helvetica, sans-serif; color: rgb(0, 127, 211);"><b><%=struc[i].base.tipos[j].tipo.nombre%></b></span>
+                                    <ul class="nested">
+                                        <% for(var k=0; k<struc[i].base.tipos[j].tipo.atributos.length; k++) {%>
+                                        <li
+                                            style="font-family:Arial, Helvetica, sans-serif; color: rgb(4, 146, 103);">
+                                            <b><%=struc[i].base.tipos[j].tipo.atributos[k]%></b>
+                                        </li>
+                                        <%}%>
+                                    </ul>
+                                </li>
+                                <%}%>
+                            </ul>
+                        </li>
+                        <li>
+                                <span class="caret"
+                                    style="font-family:Arial, Helvetica, sans-serif; color: rgb(151, 0, 211);"><b>Procedimientos</b></span>
+                                <ul class="nested">
+                                <% for(var j=0; j<struc[i].base.procedures.length; j++) {%>
+                                    <li 
+                                        style="font-family:Arial, Helvetica, sans-serif; color: rgb(4, 146, 103);">
+                                            <b><%=struc[i].base.procedures[j]%></b>
+                                    </li>
+                                <%}%>
+                                </ul>
                         </li>
                     </ul>
                 </li>

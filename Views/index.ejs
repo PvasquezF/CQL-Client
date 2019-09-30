@@ -30,6 +30,34 @@
             </center>
         </form>
     </div>
+    <%if(errores != undefined && errores.length>0){%>
+        <table class="table">
+            <tr>
+                <th scope="col">fila</th>
+                <th scope="col">columna</th>
+                <th scope="col">tipo</th>
+                <th scope="col">descripcion</th>
+                <th scope="col">fecha</th>
+            </tr>
+            <% for(var k=0; k<errores.length; k++) {%>
+                <tr>
+                    <td><%=errores[k].error.fila%></td>
+                    <td><%=errores[k].error.columna%></td>
+                    <td><%=errores[k].error.tipo%></td>
+                    <td><%=errores[k].error.descripcion%></td>
+                    <td><%=errores[k].error.fecha%></td>
+                </tr>
+            <%}%>                       
+        </table>
+    <%}%>
+    <%if(luplogoutEnviado != undefined && luplogoutRecibido != undefined){%>
+        <h6>
+                <%=luplogoutEnviado%>
+        </h6>
+        <h6>
+                <%=luplogoutRecibido%>
+        </h6>
+    <%}%>
     <script src="/Js/Jquery.js"></script>
     <script src="/Js/bootstrap.js"></script>
     <script src="/Js/Login.js"></script>

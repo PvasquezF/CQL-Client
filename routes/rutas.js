@@ -3,6 +3,8 @@ const interprete = require('../Interpreter/LupGrammar.js');
 var formidable = require('formidable');
 var fs = require('fs');
 var ssn;
+var urlIISServidor = 'http://localhost/';
+//var urlIISServidor = 'https://localhost:44333/';
 exports.routesConfig = function (app) {
     app.post("/AdvancedMode", (req, res) => {
         ssn = req.session;
@@ -31,7 +33,11 @@ exports.routesConfig = function (app) {
         if (ssn.datos) {
             res.render('./Modos.ejs');
         } else {
-            res.render('./index.ejs');
+            res.render('./index.ejs', {
+                errores: [],
+                luplogoutEnviado: "",
+                luplogoutRecibido: ""
+            });
         }
     });
 
@@ -43,18 +49,19 @@ exports.routesConfig = function (app) {
         data = JSON.stringify(loopEnviar);
         request.post({
             headers: { 'content-type': 'application/json' },
-            url: 'https://localhost:44333/api/Login',
+            url: urlIISServidor + 'api/Login',
             body: data,
             strictSSL: false
         }, function (error, response, body) {
-            var result = interprete.parse(JSON.parse(body)) ? true : false;
-            if (result) {
+            var result = interprete.parse(JSON.parse(body));
+            if (typeof result == 'boolean' && result) {
+                ssn.nombreUsuario = usuario;
                 ssn.datos = { "usuario": usuario, "paquetesOut": loopEnviar, "paquetesIn": JSON.parse(body) };
                 loopEnviar = `[+STRUC][+USER]` + usuario + `[-USER][-STRUC]`;
                 data = JSON.stringify(loopEnviar);
                 request.post({
                     headers: { 'content-type': 'application/json' },
-                    url: 'https://localhost:44333/api/struc',
+                    url: urlIISServidor + 'api/struc',
                     body: data,
                     strictSSL: false
                 }, function (error, response, body) {
@@ -69,7 +76,11 @@ exports.routesConfig = function (app) {
                     res.redirect('/Modos');
                 });
             } else {
-                res.redirect('/');
+                res.render('./index.ejs', {
+                    errores: result,
+                    luplogoutEnviado: data,
+                    luplogoutRecibido: body,
+                });
             }
         });
     });
@@ -95,15 +106,34 @@ exports.routesConfig = function (app) {
     app.get('/logout', function (req, res) {
         ssn = req.session;
         if (ssn.datos) {
+            usuario = ssn.nombreUsuario;
+            var loopEnviar = `[+LOGOUT][+USER]` + usuario + `[-USER][-LOGOUT]`;
+            data = JSON.stringify(loopEnviar);
             req.session.destroy(function (err) {
                 if (err) {
                     console.log(err);
                 } else {
-                    res.redirect('/');
+                    request.post({
+                        headers: { 'content-type': 'application/json' },
+                        url: urlIISServidor + 'api/Logout',
+                        body: data,
+                        strictSSL: false
+                    }, function (error, response, body) {
+                        var result = interprete.parse(JSON.parse(body));
+                        res.render('./index.ejs', {
+                            luplogoutEnviado: data,
+                            luplogoutRecibido: result,
+                            errores: []
+                        });
+                    });
                 }
             });
         } else {
-            res.redirect('/');
+            res.render('./index.ejs', {
+                luplogoutEnviado: "",
+                luplogoutRecibido: "",
+                errores: []
+            });
         }
     });
 
@@ -159,10 +189,11 @@ exports.routesConfig = function (app) {
             data = JSON.stringify(loopEnviar);
             request.post({
                 headers: { 'content-type': 'application/json' },
-                url: 'https://localhost:44333/api/doQuery',
+                url: urlIISServidor + 'api/doQuery',
                 body: data,
                 strictSSL: false
             }, function (error, response, body) {
+                console.log(body);
                 var result = interprete.parse(JSON.parse(body));
                 var listaMensajes = "";
                 var listaErrores = [];
@@ -185,13 +216,28 @@ exports.routesConfig = function (app) {
                     ssn.datos.mensajes = listaMensajes;
                     ssn.datos.errores = listaErrores;
                 }
-                res.status(202).json({
-                    paquetesOut: ssn.datos.paquetesOut,
-                    paquetesIn: ssn.datos.paquetesIn,
-                    listaMensajes: ssn.datos.mensajes,
-                    listaErrores: ssn.datos.errores,
-                    struc: ssn.datos.struc,
-                    selects: listaSelect
+                loopEnviar = `[+STRUC][+USER]` + usuario + `[-USER][-STRUC]`;
+                data = JSON.stringify(loopEnviar);
+                request.post({
+                    headers: { 'content-type': 'application/json' },
+                    url: urlIISServidor + 'api/struc',
+                    body: data,
+                    strictSSL: false
+                }, function (error, response, body) {
+                    var result = interprete.parse(JSON.parse(body));
+                    if (result) {
+                        ssn.datos.paquetesOut += '\n' + loopEnviar;
+                        ssn.datos.paquetesIn += '\n' + JSON.parse(body);
+                        ssn.datos.struc = result;
+                    }
+                    res.status(202).json({
+                        paquetesOut: ssn.datos.paquetesOut,
+                        paquetesIn: ssn.datos.paquetesIn,
+                        listaMensajes: ssn.datos.mensajes,
+                        listaErrores: ssn.datos.errores,
+                        struc: ssn.datos.struc,
+                        selects: listaSelect
+                    });
                 });
             });
         } else {

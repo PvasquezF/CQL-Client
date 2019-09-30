@@ -71,7 +71,7 @@
                                                 <%}%>
                                     </ul>
                                 </li>
-                            <%}%>
+                                <%}%>
                                             </ul>
                                         </li>
                                         <li>
@@ -79,11 +79,12 @@
                                                 style="font-family:Arial, Helvetica, sans-serif; color: rgb(151, 0, 211);"><b>Procedimientos</b></span>
                                             <ul class="nested">
                                                 <% for(var j=0; j<struc[i].base.procedures.length; j++) {%>
-                                                <li><span class="caret"
-                                                        style="font-family:Arial, Helvetica, sans-serif; color: rgb(4, 146, 103);"><b><%=struc[i].base.procedures[j].tipo.nombre%></b></span>
+                                                <li
+                                                    style="font-family:Arial, Helvetica, sans-serif; color: rgb(4, 146, 103);">
+                                                    <b><%=struc[i].base.procedures[j]%></b>
                                                 </li>
                                                 <%}%>
-                            </ul>
+                                </ul>
                         </li>
                     </ul>
                 </li>
@@ -144,7 +145,6 @@
     <script src="/Js/codemirror.js"></script>
     <script src="/Mode/sql/sql.js"></script>
     <script src="/Mode/javascript/javascript.js"></script>
-    <script src="/Js/main.js"></script>
     <script src="/Js/Jquery.js"></script>
     <script src="/Js/Login.js"></script>
     <script src="/Js/bootstrap.js"></script>
@@ -162,6 +162,7 @@
         });
         //editor.setSize(null, 240);
     </script>
+    <script src="/Js/main.js"></script>
 
 
 </body>

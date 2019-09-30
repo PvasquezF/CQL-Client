@@ -33,9 +33,9 @@ Blockly.Blocks['update'] = {
     this.appendStatementInput("Set")
       .setCheck(null)
       .appendField("Set");
-    this.appendDummyInput()
-      .appendField("From")
-      .appendField(new Blockly.FieldTextInput("default"), "From");
+    //this.appendDummyInput()
+    //  .appendField("From")
+    //  .appendField(new Blockly.FieldTextInput("default"), "From");
     this.appendValueInput("Where")
       .setCheck("Boolean")
       .appendField("Where");

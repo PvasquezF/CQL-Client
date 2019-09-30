@@ -1,12 +1,13 @@
 /* lexical grammar */
 %lex
+%options case-insensitive
 %s mensaje descripcion fecha data
-identificador   [a-zA-Z_][a-zA-Z0-9_]*
+identificador   [Ñña-zA-Z_][Ñña-zA-Z0-9_]*
 dataRegex       \\[\\+DATA\\](.|\s)*\\[-DATA\\]
 passwordRegex   \\[\\+PASS\\](.|\s)*\\[-PASS\\]
 descRegex      \\[\\+DESC\\](.|\s)*\\[-DESC\\]
 dateRegex      \\[\\+DATE\\](.|\s)*\\[-DATE\\]
-entero [0-9]+
+entero ('-'[0-9]+)|([0-9]+)
 %%
 <INITIAL>\s+                   /* skip whitespace */
 <INITIAL>{identificador}         return 'Identificador'
@@ -119,6 +120,7 @@ LISTAMENSAJES : PAQUETEMESSAGE {$$ = [$1];}
               ;
 
 PAQUETEMESSAGE : mensajeA CUERPOMENSAJE mensajeC {$$ = $2;}
+               | mensajeA mensajeC {$$ = "";}
                ;
                
 CUERPOMENSAJE : CUERPOMENSAJE data {$$ = $1 + $2;}
@@ -129,12 +131,15 @@ PAQUETEERROR : errorA FILA COLUMNA TIPO DESCRIPCION FECHA errorC {$$ = {"fila": 
              ;
 
 FILA : lineA ENTERO lineC {$$ = $2;}
+     | lineA lineC {$$ = 0;}
      ;
 
 DESCRIPCION : descripcionA CUERPOMENSAJE descripcionC {$$ = $2;}
+            | descripcionA descripcionC {$$ = "";}
             ;
 
 FECHA : dateA CUERPOMENSAJE dateC {$$ = $2;}
+      | dateA dateC {$$ = "";}
       ;
 
 PAQUETESTRUC : databasesA LISTABASES databasesC {$$ = $2;}
@@ -174,6 +179,7 @@ LISTACOLUMNAS : LISTACOLUMNAS COLUMNA {$$ = $1; $$.push($2);}
 
 COLUMNA : columnA Identificador columnC {$$ = $2;}
         | columnA ENTERO columnC {$$ = $2;}
+        | columnA columnC {$$ = 0;}
         ;
 
 TIPOS : typesA LISTATIPOS typesC {$$ = $2;}
@@ -199,7 +205,7 @@ LISTAATRIBUTOS : LISTAATRIBUTOS ATRIBUTO {$$ = $1; $$.push($2);}
 ATRIBUTO : attributeA Identificador attributeC {$$ = $2;}
      ;
 
-PROCEDURES : proceduresA LISTAPROCEDURES proceduresC {$$ = {procedimientos: $2};}
+PROCEDURES : proceduresA LISTAPROCEDURES proceduresC {$$ = $2;}
            | proceduresA proceduresC {$$ = [];}
            ;
 
